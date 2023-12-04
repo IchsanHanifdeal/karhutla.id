@@ -93,9 +93,6 @@ $rowd = mysqli_fetch_assoc($resultd);
     var googleMap;
     var markers = [];
     var circles = [];
-    var currentLocationMarker;
-    var directionsService;
-    var directionsRenderer;
 
     function initGoogleMap() {
       googleMap = new google.maps.Map(document.getElementById("google-map"), {
@@ -106,68 +103,70 @@ $rowd = mysqli_fetch_assoc($resultd);
         zoom: 15,
       });
 
-      directionsService = new google.maps.DirectionsService();
-      directionsRenderer = new google.maps.DirectionsRenderer({
-        map: googleMap
-      });
-
       <?php
-      // Fetch all rows from the result set into an array
-      $data = [];
+      $resultd = mysqli_query($conn, $sqld);
       while ($rowd = mysqli_fetch_assoc($resultd)) {
-        $data[] = $rowd;
-      }
-
-      // Iterate through the array
-      foreach ($data as $rowd) {
         $nama = $rowd['nama_daerah'];
         $long = $rowd['longitude'];
         $lat = $rowd['latitude'];
         $level = $rowd['level'];
         $radius = $rowd['radius'];
+
+        if (!empty($lat) && !empty($long) && !empty($radius)) {
+          $icon = '';
+          $strokeColor = '';
+          $fillColor = '';
+          if ($level == 'rendah') {
+            $icon = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+            $strokeColor = '#0000FF';
+            $fillColor = '#0000FF';
+          } else if ($level == 'menengah') {
+            $icon = 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png';
+            $strokeColor = '#FFFF00';
+            $fillColor = '#FFFF00';
+          } else if ($level == 'tinggi') {
+            $icon = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+            $strokeColor = '#FF0000';
+            $fillColor = '#FF0000';
+          }
       ?>
-        var marker = new google.maps.Marker({
-          position: {
-            lat: <?php echo $lat; ?>,
-            lng: <?php echo $long; ?>
-          },
-          map: googleMap,
-          title: '<?php echo $nama; ?>',
-          level: '<?php echo $level; ?>'
-        });
+          var marker = new google.maps.Marker({
+            position: {
+              lat: <?php echo $lat; ?>,
+              lng: <?php echo $long; ?>
+            },
+            map: googleMap,
+            title: '<?php echo $nama; ?>',
+            level: '<?php echo $level; ?>',
+            icon: '<?php echo $icon; ?>'
+          });
 
-        var circle = new google.maps.Circle({
-          strokeColor: '#FF0000',
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillColor: '#FF0000',
-          fillOpacity: 0.35,
-          map: googleMap,
-          center: {
-            lat: <?php echo $lat; ?>,
-            lng: <?php echo $long; ?>
-          },
-          radius: <?php echo $radius; ?>
-        });
+          var circle = new google.maps.Circle({
+            strokeColor: '<?php echo $strokeColor; ?>',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '<?php echo $fillColor; ?>',
+            fillOpacity: 0.35,
+            map: googleMap,
+            center: {
+              lat: <?php echo $lat; ?>,
+              lng: <?php echo $long; ?>
+            },
+            radius: <?php echo $radius; ?>
+          });
 
-        marker.addListener('click', function() {
-          updateMarkerColor(marker);
-          calculateAndDisplayRoute(marker.getPosition());
-        });
+          marker.addListener('click', function() {
+            updateMarkerColor(this);
+            calculateAndDisplayRoute(this.getPosition());
+          });
 
-        markers.push(marker);
-        circles.push(circle);
+          markers.push(marker);
+          circles.push(circle);
       <?php
+        }
       }
       ?>
-    }
 
-    function updateMarkerColor(marker) {
-      // Add your code to update marker color here
-    }
-
-    function calculateAndDisplayRoute(destination) {
-      // Add your code to calculate and display route here
     }
   </script>
 

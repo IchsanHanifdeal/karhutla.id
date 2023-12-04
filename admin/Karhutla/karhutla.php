@@ -177,7 +177,7 @@ $rowd = mysqli_fetch_assoc($resultd);
                     lat: 0.537488,
                     lng: 101.448387
                 },
-                zoom: 10,
+                zoom: 15,
             });
 
             <?php
