@@ -24,8 +24,25 @@ $rowd = mysqli_fetch_assoc($resultd);
   <link href="assets/landing/assets/css/material-kit.css?v=3.0.0" rel="stylesheet" />
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+  <style>
+    .legend {
+      margin-top: 20px;
+    }
 
+    .legend-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
 
+    .legend-marker {
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+      display: inline-block;
+      border-radius: 50%;
+    }
+  </style>
 </head>
 
 <body>
@@ -75,7 +92,25 @@ $rowd = mysqli_fetch_assoc($resultd);
       </div>
       <div id="google-map" style="height: 100vh; width: 100%;"></div>
     </div>
+    <!-- Legend -->
+    <div class="legend">
+      <h3>Keterangan</h3>
+      <div class="legend-item">
+        <span class="legend-marker" style="background-color: blue;"></span>
+        <span class="legend-label">Level Rendah</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-marker" style="background-color: yellow;"></span>
+        <span class="legend-label">Level Menengah</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-marker" style="background-color: red;"></span>
+        <span class="legend-label">Level Tinggi</span>
+      </div>
+    </div>
   </div>
+  </div>
+
   <footer class="footer pt-5 mt-5">
     <div class="container">
       <div class=" row">
